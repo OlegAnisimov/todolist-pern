@@ -1,15 +1,25 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const pool = require('./db')
+const pool = require('./db');
 
 //middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); //req.body
 
 // ROUTES
 
 //create a todo_item (use _item that not sign todo)
+app.post('/todos', async (req, res) => {
+    try {
+        const { description } = req.body;
+        const newTodo = await pool.query('INSERT INTO todo(description) VALUES($1) RETURNING *',
+            [description]);
+        res.json(newTodo.rows[0]);
+    } catch (e) {
+        console.error(e.message);
+    }
+});
 
 //get all todos
 
