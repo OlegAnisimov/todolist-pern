@@ -55,7 +55,18 @@ app.put('/todos/:id', async (req, res) => {
         console.error(e.message);
     }
 });
+
 //delete a todo_item
+app.delete('/todos/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleteTodo = await pool.query('DELETE FROM todo WHERE todo_id = $1',
+            [id]);
+        res.json('Todo was deleted');
+    } catch (e) {
+        console.error(e.message);
+    }
+});
 
 
 app.listen(5000, () => {
